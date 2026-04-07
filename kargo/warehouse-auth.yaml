@@ -1,0 +1,10 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: auth-warehouse
+  namespace: kargobook-demo
+spec:
+  subscriptions:
+    - image:
+        repoURL: ghcr.io/kargobook/auth-service
+        semverConstraint: ">=1.0.0"

@@ -1,0 +1,106 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: auth-dev
+  namespace: kargobook-demo
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: auth-warehouse
+      sources:
+        direct: true
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: git-clone
+          config:
+            repoURL: https://github.com/kargobook/demo-gitops.git
+            checkout:
+              - branch: main
+                path: ./repo
+        - uses: kustomize-set-image
+          config:
+            path: ./repo/apps/auth/envs/dev
+            images:
+              - image: ghcr.io/kargobook/auth-service
+        - uses: git-commit
+          config:
+            path: ./repo
+            message: "promote auth to dev: ${{ freight.image.tag }}"
+        - uses: git-push
+          config:
+            path: ./repo
+            targetBranch: main
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: auth-staging
+  namespace: kargobook-demo
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: auth-warehouse
+      sources:
+        stages:
+          - auth-dev
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: git-clone
+          config:
+            repoURL: https://github.com/kargobook/demo-gitops.git
+            checkout:
+              - branch: main
+                path: ./repo
+        - uses: kustomize-set-image
+          config:
+            path: ./repo/apps/auth/envs/staging
+            images:
+              - image: ghcr.io/kargobook/auth-service
+        - uses: git-commit
+          config:
+            path: ./repo
+            message: "promote auth to staging: ${{ freight.image.tag }}"
+        - uses: git-push
+          config:
+            path: ./repo
+            targetBranch: main
+---
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Stage
+metadata:
+  name: auth-prod
+  namespace: kargobook-demo
+spec:
+  requestedFreight:
+    - origin:
+        kind: Warehouse
+        name: auth-warehouse
+      sources:
+        stages:
+          - auth-staging
+  promotionTemplate:
+    spec:
+      steps:
+        - uses: git-clone
+          config:
+            repoURL: https://github.com/kargobook/demo-gitops.git
+            checkout:
+              - branch: main
+                path: ./repo
+        - uses: kustomize-set-image
+          config:
+            path: ./repo/apps/auth/envs/prod
+            images:
+              - image: ghcr.io/kargobook/auth-service
+        - uses: git-commit
+          config:
+            path: ./repo
+            message: "promote auth to prod: ${{ freight.image.tag }}"
+        - uses: git-push
+          config:
+            path: ./repo
+            targetBranch: main

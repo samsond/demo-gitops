@@ -1,0 +1,10 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Warehouse
+metadata:
+  name: payments-warehouse
+  namespace: kargobook-demo
+spec:
+  subscriptions:
+    - image:
+        repoURL: ghcr.io/kargobook/payments-api
+        semverConstraint: ">=1.0.0"

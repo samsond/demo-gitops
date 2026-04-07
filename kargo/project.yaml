@@ -1,0 +1,18 @@
+apiVersion: kargo.akuity.io/v1alpha1
+kind: Project
+metadata:
+  name: kargobook-demo
+spec:
+  promotionPolicies:
+    - stage: payments-dev
+      autoPromotionEnabled: true
+    - stage: payments-staging
+      autoPromotionEnabled: true
+    - stage: payments-prod
+      autoPromotionEnabled: false
+    - stage: auth-dev
+      autoPromotionEnabled: true
+    - stage: auth-staging
+      autoPromotionEnabled: true
+    - stage: auth-prod
+      autoPromotionEnabled: false

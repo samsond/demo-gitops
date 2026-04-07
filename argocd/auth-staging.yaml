@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: auth-staging
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kargobook/demo-gitops.git
+    targetRevision: main
+    path: apps/auth/envs/staging
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: auth-staging
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true

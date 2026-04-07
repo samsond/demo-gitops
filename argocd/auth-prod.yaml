@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: auth-prod
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/kargobook/demo-gitops.git
+    targetRevision: main
+    path: apps/auth/envs/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: auth-prod
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
