@@ -1,6 +1,6 @@
 # Demo GitOps Repository
 
-The GitOps repository for the example applications in [Continuous Promotion with Kargo](https://learning.oreilly.com/library/view/continuous-promotion-with/), published by O'Reilly Media.
+The GitOps repository for the example applications in the Kargo Book.
 
 This repo is managed by **Argo CD** (for reconciliation) and **Kargo** (for promotion). When Kargo promotes a new image tag, it updates the Kustomize overlay in this repo, and Argo CD syncs the change into the cluster.
 
